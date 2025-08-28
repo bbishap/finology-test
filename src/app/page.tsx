@@ -9,6 +9,8 @@ import { useDebounce } from "@/hooks/useDebounce";
 import { FilterComponent } from "@/components/Filter";
 import { CITIES, COMPANIES } from "@/constants/userFilterConstants";
 import { SelectChangeEvent } from "@mui/material";
+import { UserLoading } from "@/components/UserLoading";
+import { AlertComponent } from "@/components/Alert";
 
 interface SelectedFilter {
   city: string;
@@ -105,51 +107,54 @@ export default function HomePage() {
     return result;
   }, [data, debouncedValue, selectedFilter]);
 
-  if (loading) return <p className="text-blue-500">Loading posts...</p>;
-  if (error) return <p className="text-red-500">Error: {error}</p>;
-
   return (
-    <main className="p-2">
-      <h1 className="text-2xl font-bold mb-4">Users List</h1>
-      <div className="flex flex-col justify-center items-center py-8 w-full">
-        <SearchBox
-          handleSearchChange={handleSearchChange}
-          value={searchBoxText}
-        />
-        <div className="flex mt-4 pb-4 flex-col items-center justify-center sm:flex-row w-full">
-          <FilterComponent
-            inputData={CITIES}
-            handleSelect={handleSelect}
-            label="City"
-            value={selectedFilter.city}
+    <>
+      <main className="p-4">
+        <h1 className="text-2xl font-bold mb-4">Users List</h1>
+        <div className="flex flex-col justify-center items-center py-8 w-full">
+          <SearchBox
+            handleSearchChange={handleSearchChange}
+            value={searchBoxText}
           />
-          <FilterComponent
-            inputData={COMPANIES}
-            handleSelect={handleSelect}
-            label="Company"
-            value={selectedFilter.company}
-          />
-        </div>
-        {Object.values(selectedFilter).some((val) => val !== "") && (
-          <div className="flex items-center ">
-            <u className="cursor-pointer" onClick={handleClearAll}>
-              Clear all
-            </u>
+          <div className="flex mt-4 pb-4 flex-col items-center justify-center sm:flex-row w-full">
+            <FilterComponent
+              inputData={CITIES}
+              handleSelect={handleSelect}
+              label="City"
+              value={selectedFilter.city}
+            />
+            <FilterComponent
+              inputData={COMPANIES}
+              handleSelect={handleSelect}
+              label="Company"
+              value={selectedFilter.company}
+            />
           </div>
-        )}
-      </div>
+          {Object.values(selectedFilter).some((val) => val !== "") && (
+            <div className="flex items-center ">
+              <u className="cursor-pointer" onClick={handleClearAll}>
+                Clear all
+              </u>
+            </div>
+          )}
+        </div>
 
-      {filteredData.length > 0 ? (
-        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-          {filteredData.map((userData, idx) => (
-            <UserCard userData={userData} key={idx} />
-          ))}
-        </div>
-      ) : (
-        <div className="flex justify-center items-center w-full">
-          No Data Found
-        </div>
-      )}
-    </main>
+        {filteredData.length > 0 ? (
+          <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {filteredData.map((userData, idx) => (
+              <UserCard userData={userData} key={idx} />
+            ))}
+          </div>
+        ) : !loading && !error ? (
+          <div className="flex justify-center items-center w-full">
+            No Data Found
+          </div>
+        ) : null}
+      </main>
+      {loading && !error ? <UserLoading /> : null}
+      {!loading && error ? (
+        <AlertComponent severity="error" message={error} />
+      ) : null}
+    </>
   );
 }
