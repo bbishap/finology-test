@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// This is a custom hook, used for delay in seach work
 export const useDebounce = <T,>(value: T, delay: number): T => {
   const [debouncedValue, setDebouncedValue] = useState<T>(value);
 

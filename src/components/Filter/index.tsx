@@ -1,13 +1,12 @@
 import * as React from "react";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
 interface FilterComponentProps {
-  inputData: string;
-  handleSelect: (event: SelectChangeEvent) => void;
+  inputData: string[];
+  handleSelect: (event: SelectChangeEvent, label: string) => void;
   label: string;
   value: string;
 }
@@ -18,48 +17,23 @@ export const FilterComponent: React.FC<FilterComponentProps> = ({
   label,
   value,
 }) => {
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setAge(event.target.value);
-  };
-
   return (
-    <div>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <InputLabel id="demo-simple-select-helper-label">{label}</InputLabel>
-        <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
-          value={value}
-          label={label}
-          onChange={(event) => handleSelect(event)}
-        >
-          <MenuItem value="">
-            <em>None</em>
+    <FormControl
+      sx={{ m: 1 }}
+      className="w-1/1 2xs:w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/5"
+    >
+      <InputLabel>{label}</InputLabel>
+      <Select
+        value={value}
+        label={label}
+        onChange={(event) => handleSelect(event, label)}
+      >
+        {inputData.map((data, idx) => (
+          <MenuItem value={data} key={idx}>
+            <em>{data}</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>With label + helper text</FormHelperText>
-      </FormControl>
-      <FormControl sx={{ m: 1, minWidth: 120 }}>
-        <Select
-          value={age}
-          onChange={handleChange}
-          displayEmpty
-          inputProps={{ "aria-label": "Without label" }}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-        <FormHelperText>Without label</FormHelperText>
-      </FormControl>
-    </div>
+        ))}
+      </Select>
+    </FormControl>
   );
 };
