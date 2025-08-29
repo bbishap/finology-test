@@ -118,13 +118,13 @@ export default function HomePage() {
           />
           <div className="flex mt-4 pb-4 flex-col items-center justify-center sm:flex-row w-full">
             <FilterComponent
-              inputData={CITIES}
+              inputData={CITIES.sort()}
               handleSelect={handleSelect}
               label="City"
               value={selectedFilter.city}
             />
             <FilterComponent
-              inputData={COMPANIES}
+              inputData={COMPANIES.sort()}
               handleSelect={handleSelect}
               label="Company"
               value={selectedFilter.company}

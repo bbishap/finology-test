@@ -7,7 +7,7 @@ export const CITIES = [
   "Lebsackbury",
   "Bartholomebury",
   "Aliyaview",
-  "Howemouths",
+  "Howemouth",
   "South Christy",
 ];
 
